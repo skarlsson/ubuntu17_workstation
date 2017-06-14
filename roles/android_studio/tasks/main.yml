@@ -1,0 +1,10 @@
+- apt_repository: repo='ppa:paolorotolo/android-studio' state=present
+  sudo: yes
+  
+- name: add android-studio
+  sudo: yes
+  apt: pkg={{ item }}
+  
+  with_items:
+    - android-studio
+    - lib32stdc++6

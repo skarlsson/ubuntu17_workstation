@@ -1,0 +1,44 @@
+# file: roles/scale/tasks/main.yml
+
+- name: Scala | Download Scala
+  command: wget http://downloads.typesafe.com/scala/{{ scala_version }}/scala-{{ scala_version }}.tgz chdir=/tmp creates=/tmp/scala-{{ scala_version }}.tgz
+  sudo: yes
+
+- name: Scala | Unpack the compressed Scala binaries
+  command: tar -xvzf /tmp/scala-{{ scala_version }}.tgz chdir=/usr/lib/jvm/java-8-oracle creates=/usr/lib/jvm/java-8-oracle/scala-{{ scala_version }}  
+  sudo: yes
+
+  
+- name: Scala | Set the permissions on the Scala binaries
+  file: path=/usr/lib/jvm/java-8-oracle/scala-{{ scala_version }}/bin state=directory mode=0755 recurse=yes  
+  sudo: yes
+
+- name: Scala | Update the symbolic link to the Scala install
+  file: path=/usr/lib/jvm/java-8-oracle/scala src=/usr/lib/jvm/java-8-oracle/scala-{{ scala_version }} state=link force=yes  
+  sudo: yes
+      
+  
+- name: Set SCALA_HOME environment variable
+  lineinfile: dest=/etc/environment regexp='^SCALA_HOME.*' line='SCALA_HOME=/usr/lib/jvm/java-8-oracle/scala' insertbefore='^PATH.*'
+  sudo: yes
+
+
+- name: add Scala binaries to PATH environment variable
+  lineinfile: dest=/etc/environment state=present backrefs=yes regexp='PATH=(["]*)((?!.*?/usr/lib/jvm/java-8-oracle/scala/bin).*?)(["]*)$' line="PATH=\1\2:/usr/lib/jvm/java-8-oracle/scala/bin\3"
+  sudo: yes
+  
+- name: Scala | Inform the system where Scala is located
+  command: "{{ item }}"
+  sudo: yes
+  with_items:
+    - update-alternatives --install "/usr/bin/scala" "scala" "/usr/lib/jvm/java-8-oracle/scala/bin/scala" 1
+    - update-alternatives --install "/usr/bin/scalac" "scalac" "/usr/lib/jvm/java-8-oracle/scala/bin/scalac" 1
+    - update-alternatives --install "/usr/bin/scalap" "scalap" "/usr/lib/jvm/java-8-oracle/scala/bin/scalap" 1
+
+- name: Scala | Set the system default for Scala
+  command: "{{ item }}"
+  sudo: yes
+  with_items:
+    - update-alternatives --set scala /usr/lib/jvm/java-8-oracle/scala/bin/scala
+    - update-alternatives --set scalac /usr/lib/jvm/java-8-oracle/scala/bin/scalac
+    - update-alternatives --set scalap /usr/lib/jvm/java-8-oracle/scala/bin/scalap

@@ -1,0 +1,17 @@
+- hosts: all
+  gather_facts: yes
+
+- hosts: all
+  become: true
+  tasks:
+   - apt: update_cache=yes upgrade=yes
+
+- hosts: all
+  become: true
+  roles:
+     - java8  
+     - zookeeper  
+     - kafka-broker	 
+     - confluent-schema-registry
+     - confluent-kafka-rest
+#     - telegraf

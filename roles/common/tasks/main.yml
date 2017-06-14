@@ -1,0 +1,37 @@
+---
+- name: Common | Updates packages
+  sudo: yes
+  apt: update_cache=yes upgrade=dist
+
+- name: Common | Make sure essential tools are installed/up-to-date
+  sudo: yes
+  apt: pkg={{ item }}
+  
+  with_items:
+    - python-yaml 
+    - python-jinja2 
+    - python-pycurl
+    - python-apt
+    - ntp
+    - ack-grep
+    - subversion 
+    - htop   
+    - iotop
+    - git
+    - wget     
+    - unzip     
+    - curl
+    - openssl
+    - sysstat
+    - emacs
+    - openvpn
+
+
+- apt_repository: repo='ppa:nilarimogard/webupd8' state=present
+  sudo: yes
+
+- apt: pkg=launchpad-getkeys
+  sudo: yes
+
+- name: make everyone sudo without password
+  lineinfile: "dest=/etc/sudoers state=present line='%sudo ALL=(ALL) NOPASSWD: ALL'"

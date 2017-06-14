@@ -1,0 +1,7 @@
+- name: reload systemd
+  sudo: yes
+  command: systemctl daemon-reload
+
+- name: restart confluent-kafka-rest
+  service: name=confluent-kafka-rest state=restarted  
+ 

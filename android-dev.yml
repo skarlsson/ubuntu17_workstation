@@ -1,0 +1,15 @@
+- hosts: all
+  gather_facts: yes
+  sudo: true
+  
+
+- hosts: all
+  sudo: true
+  roles:
+    - common
+    - desktop_tools	
+    - chrome
+    - build_cpp
+    - java8	
+    - build_java
+    - android_studio

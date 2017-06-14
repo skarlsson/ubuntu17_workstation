@@ -1,0 +1,9 @@
+- name: reload systemd
+  sudo: yes
+  command: systemctl daemon-reload
+  
+- name: restart zookeeperd
+  service: name=zookeeper state=restarted enabled=yes 
+
+#sleep=20
+ 

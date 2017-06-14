@@ -1,0 +1,8 @@
+- hosts: all
+  become: true
+  ignore_errors : yes  
+  tasks:
+    - filesystem: fstype=ext4 dev={{ second_ssd_device }} force=yes
+      when: second_ssd_device is defined	
+    - mount: name=/mnt/ssd0 src={{ second_ssd_device }} fstype=ext4 opts=noatime state=mounted
+      when: second_ssd_device is defined

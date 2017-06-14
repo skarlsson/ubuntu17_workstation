@@ -1,0 +1,12 @@
+- name: download idea {{ idea_tarball }
+  get_url: dest=/tmp url=https://download.jetbrains.com/idea/{{ idea_tarball }} validate_certs=no force=no
+
+- file: path={{software_install_dir}} state=directory  
+  sudo: yes
+
+- name: extract idea
+  shell: tar xzf /tmp/{{ idea_tarball }} -C {{ software_install_dir }} creates={{software_install_dir}}/{{ idea_version_in_tar }}
+  sudo: yes
+
+- file: src={{software_install_dir}}/{{ idea_version_in_tar }}/bin/idea.sh dest={{ user_binaries }}/idea.sh state=link
+  sudo: yes 

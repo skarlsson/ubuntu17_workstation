@@ -1,0 +1,8 @@
+listan över biblioteken borde vara en vanlig lista och byggas upp till en rad.
+
+iterera över listan för att sätta rätt rättigheter
+
+skicka scriptfile till server för att formatera om diskarna....
+
+
+

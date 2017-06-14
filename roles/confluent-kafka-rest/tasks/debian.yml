@@ -1,0 +1,29 @@
+- name: add confluent signing key
+  apt_key: url=http://packages.confluent.io/deb/3.0/archive.key state=present  
+  
+- name: add confluent repo
+  apt_repository: repo='deb http://packages.confluent.io/deb/3.0 stable main' state=present  
+  
+- name: update apt packages
+  apt: update_cache=yes upgrade=yes
+
+- name: install packages
+  apt: pkg={{ item }}
+  with_items:
+   - confluent-kafka-rest
+
+- file: path=/etc/confluent-kafka-rest state=directory owner={{ kafka_user }} group={{ kafka_group }}
+   
+- name: systemd start script
+  template: src=confluent-kafka-rest.service dest=/etc/systemd/system/confluent-kafka-rest.service owner=root group=root mode=644 
+  notify: 
+   - reload systemd     
+   - restart confluent-kafka-rest
+
+- name: Update the configuration
+  template: src=confluent-kafka-rest.properties dest=/etc/confluent-kafka-rest/confluent-kafka-rest.properties owner={{ kafka_user }} group={{ kafka_group }} mode=0644
+  notify:
+    - restart confluent-kafka-rest
+  
+- name: "make sure the confluent-kafka-rest is running and enabled"
+  service: "name=confluent-kafka-rest state=started enabled=yes"

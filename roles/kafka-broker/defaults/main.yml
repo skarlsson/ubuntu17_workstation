@@ -1,0 +1,47 @@
+# file: roles/kafka/defaults/main.yml
+
+
+zookeeper_client_port: 2181
+kafka_jolokia_port:    8778    
+kafka_server_port:     9092
+
+kafka_advertized_hostname: "{{ ansible_nodename }}"
+kafka_server_HEAP_OPTS: '-Xmx4G -Xms4G'
+
+scala_version:       2.12
+kafka_short_version: 0.10.2.0
+jolokia_version:     1.3.6
+
+kafka_full_version: "{{scala_version}}-{{kafka_short_version}}"
+
+kafka_download_url: http://www.eu.apache.org/dist/kafka/{{ kafka_short_version }}/kafka_{{ kafka_full_version }}.tgz 
+jolokia_download_url: https://github.com/rhuss/jolokia/releases/download/v{{ jolokia_version }}/jolokia-{{ jolokia_version }}-bin.tar.gz  
+
+kafka_root_dir: /csi/kafka
+
+#default 256 -> 128K
+#32768 *  512-byte blocks -> 16MB NOT SURE IT*S USED ANY MORE
+kafka_read_ahead_size: 32768
+
+kafka_user: kafka
+kafka_group: kafka
+kafka_default_replication_factor:   3
+kafka_min_insync_replicas:          2
+kafka_default_num_partitions:       8
+kafka_auto_leader_rebalance_enable: true
+
+# server.properties required settings
+#kafka_server_JMX_PORT: 13005
+
+# server.properties advanced settings
+kafka_server_num_network_threads: 4
+kafka_server_num_io_threads: 4
+kafka_server_socket_send_buffer_bytes: 1048576
+kafka_server_socket_receive_buffer_bytes: 1048576
+kafka_server_socket_request_max_bytes: 1048576
+kafka_server_log_flush_interval_messages: 1000
+kafka_server_log_flush_interval_ms: 1000
+kafka_server_log_retention_hours: 48
+kafka_server_log_segment_bytes: 536870912
+kafka_server_log_cleanup_interval_mins: 10
+kafka_server_zookeeper_connection_timeout_ms: 60000

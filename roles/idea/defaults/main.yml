@@ -1,0 +1,6 @@
+ansible_cache_dir: /tmp
+software_install_dir: /csi
+user_binaries: /usr/local/bin
+
+idea_tarball: ideaIC-15.0.1.tar.gz
+idea_version_in_tar: idea-IC-143.382.35

@@ -1,0 +1,104 @@
+---
+- name: Creates download directory
+  file: path="{{ root_data_dir }}/downloads" state=directory
+
+
+- name: Check if CUDA is installed
+  command: dpkg-query -W cuda
+  ignore_errors: true  
+  register: cuda_installed
+  changed_when: false  
+  
+#- name: Download CUDA
+#  get_url:
+#    url: https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb
+#    dest: /tmp/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb
+#  when: cuda_installed|failed
+
+#- name: Install CUDA
+#  apt:  deb="/tmp/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb"
+#  when: cuda_installed|failed
+
+#- apt: name=cuda state=installed update_cache=yes  
+#  when: cuda_installed|failed
+
+- name: Install cuda toolkit
+  package: name={{ item }} state=latest
+  become: true  
+  with_items:
+    - nvidia-cuda-toolkit
+    - libcupti-dev	
+
+- name: register running kernel version
+  command: uname -r
+  register: running_kernel
+  changed_when: false
+
+#not sure we need anything of theese???  
+- name: Install list of packages
+  apt: name={{item}} state=installed
+  with_items:
+   - unzip
+   - opencl-headers
+   - build-essential
+   - protobuf-compiler
+   - libprotoc-dev
+   - libboost-all-dev
+   - libleveldb-dev
+   - hdf5-tools
+   - libhdf5-serial-dev
+   - libopencv-core-dev
+   - libopencv-highgui-dev
+   - libsnappy-dev
+   - libatlas-base-dev
+   - cmake
+   - libstdc++6-4.8-dbg
+   - libgoogle-glog-dev
+   - libgflags-dev
+   - liblmdb-dev
+   - gfortran
+   - "linux-image-extra-{{ running_kernel.stdout }}"
+   - "linux-headers-{{ running_kernel.stdout }}"
+   - "linux-image-{{ running_kernel.stdout }}"
+
+ #- libsnappy1
+ #- libgoogle-glog0
+
+#- file: path=/tmp/cudnn-8.0-linux-x64-v5.1 state=directory
+
+#- name: Download cuDNN
+#  get_url:
+#  args:
+#    url: http://developer.download.nvidia.com/compute/redist/cudnn/v5.1/cudnn-8.0-linux-x64-v5.1.tgz
+#    dest: /tmp/cudnn-8.0-linux-x64-v5.1.tgz
+
+- name: Download cuDNN runtime lib
+  get_url:
+  args:
+    url: https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v6/prod/8.0_20170427/Ubuntu16_04_x64/libcudnn6_6.0.21-1+cuda8.0_amd64-deb
+    dest: "{{ root_data_dir }}/downloads/libcudnn6_6.0.21-1+cuda8.0_amd64.deb"
+
+- name: Download cuDNN dev lib
+  get_url:
+  args:
+    url: https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v6/prod/8.0_20170427/Ubuntu16_04_x64/libcudnn6-dev_6.0.21-1+cuda8.0_amd64-deb
+    dest: "{{ root_data_dir }}/downloads/libcudnn6-dev_6.0.21-1+cuda8.0_amd64.deb"
+
+- name: Download cuDNN samples
+  get_url:
+  args:
+    url: https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v6/prod/8.0_20170427/Ubuntu16_04_x64/libcudnn6-doc_6.0.21-1%2Bcuda8.0_amd64-deb
+    dest: "{{ root_data_dir }}/downloads/libcudnn6-doc_6.0.21-1%2Bcuda8.0_amd64.deb"
+
+#- name: Copy cuDNN headers from /tmp/cudnn-8.0-linux-x64-v5.1
+#  command: "cp /tmp/cudnn-8.0-linux-x64-v5.1/cuda/include/cudnn.h /usr/local/cuda/include"
+#  args:
+#     creates: /usr/local/cuda/include/cudnn.h
+
+#- name: Copy cuDNN libs from /tmp/cudnn-8.0-linux-x64-v5.1
+#  shell: "cp /tmp/cudnn-8.0-linux-x64-v5.1/cuda/lib64/libcudnn* /usr/local/cuda/lib64/"
+#  args:
+#    creates: /usr/local/cuda/lib64/libcudnn.so.5
+
+#- name: Set permissions on cuDNN files
+#  shell: "chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*"

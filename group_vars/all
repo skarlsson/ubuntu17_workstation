@@ -1,0 +1,116 @@
+root_data_dir: /mnt/ssd0/
+logrotate_rotate:      2
+logrotate_frequency:   daily
+
+#shared service ports
+zookeeper_client_port:   2181
+kafka_server_port:       9092
+schema_registry_port:    8081
+influxdb_port:           8086
+zookeeper_jolokia_port:  8777
+kafka_jolokia_port:      8778
+
+#ZOOKEEPER PROPS
+zookeeper_root_dir:      "{{ root_data_dir }}/zookeeper"
+zookeeper_data_dir:      "{{ zookeeper_root_dir }}/zkdata"
+zookeeper_data_log_dir:  "{{ zookeeper_root_dir }}/zklog"
+
+
+#KAFKA PROPS
+kafka_zookeeper_connect: "{{ ansible_hostname }}:{{ zookeeper_client_port }}"
+kafka_brokers_connect:   "{{ ansible_hostname }}:{{ kafka_server_port }}"
+kafka_log_dirs:
+    - "{{ root_data_dir }}/kafka_log"
+
+kafka_broker_id:                    1
+kafka_default_replication_factor:   1
+kafka_min_insync_replicas:          1
+kafka_auto_leader_rebalance_enable: true
+kafka_advertized_hostname:          "{{ ansible_hostname }}"
+
+#INFLUX PROPS	
+influxdb_root_dir: "{{ root_data_dir }}/influxdb"
+influx_url: "http://{{ ansible_hostname }}:{{ influxdb_port }}"
+
+#TELEGRAF
+telegraf_plugins_extra:
+ - plugin: kafka_consumer
+   config:
+     - topics = ["kspp_metrics"]
+     - zookeeper_peers = ["{{ ansible_hostname }}:{{ zookeeper_client_port }}"]
+     - consumer_group = "telegraf_metrics_consumer_at_{{ ansible_hostname }}"
+     - metric_buffer = 100000
+     - offset = "oldest"
+     - data_format = "influx"
+      
+telegraf_agent_output:
+  - type: influxdb
+    config:
+      - urls = ["{{ influx_url }}"]
+      - database = "telegraf"
+      - precision = "s"
+  
+
+telegraf_plugins_extra:
+  - plugin: jolokia
+    config:
+      - context = "/jolokia/"
+      - name_override = "kafka"
+    servers:
+       - { name: "{{ ansible_hostname }}", host: "{{ansible_hostname}}", port: "{{ kafka_jolokia_port }}" }
+    metrics:
+       - { name: "BytesInPerSec", mbean: "kafka.server:name=BytesInPerSec,type=BrokerTopicMetrics" }       
+       - { name: "BytesOutPerSec", mbean: "kafka.server:name=BytesOutPerSec,type=BrokerTopicMetrics" }              
+       - { name: "MessagesInPerSec", mbean: "kafka.server:name=MessagesInPerSec,type=BrokerTopicMetrics" }              
+       - { name: "TotalProduceRequestsPerSec", mbean: "kafka.server:name=TotalProduceRequestsPerSec,type=BrokerTopicMetrics" }
+       - { name: "TotalFetchRequestsPerSec", mbean: "kafka.server:name=TotalFetchRequestsPerSec,type=BrokerTopicMetrics" }
+       - { name: "Produce", mbean: "kafka.server:type=Produce" }    
+       - { name: "Fetch", mbean: "kafka.server:type=Fetch" }    
+       - { name: "BrokerState", mbean: "kafka.server:name=BrokerState,type=KafkaServer" }    
+       - { name: "LeaderElectionRateAndTimeMs", mbean: "kafka.controller:name=LeaderElectionRateAndTimeMs,type=ControllerStats" }
+       - { name: "UncleanLeaderElectionsPerSec", mbean: "kafka.controller:name=UncleanLeaderElectionsPerSec,type=ControllerStats" }       
+       - { name: "OfflinePartitionsCount", mbean: "kafka.controller:name=OfflinePartitionsCount,type=KafkaController" }
+       - { name: "PreferredReplicaImbalanceCount", mbean: "kafka.controller:name=PreferredReplicaImbalanceCount,type=KafkaController" }       
+       - { name: "ActiveControllerCount", mbean: "kafka.controller:name=ActiveControllerCount,type=KafkaController" }              
+       - { name: "RequestHandlerAvgIdlePercent", mbean: "kafka.server:name=RequestHandlerAvgIdlePercent,type=KafkaRequestHandlerPool" }
+       - { name: "IsrShrinksPerSec", mbean: "kafka.server:name=IsrShrinksPerSec,type=ReplicaManager" }
+       - { name: "LeaderCount", mbean: "kafka.server:name=LeaderCount,type=ReplicaManager" }              
+       - { name: "PartitionCount", mbean: "kafka.server:name=PartitionCount,type=ReplicaManager" }                     
+       - { name: "IsrExpandsPerSec", mbean: "kafka.server:name=IsrExpandsPerSec,type=ReplicaManager" }                            
+       - { name: "IsrShrinksPerSec", mbean: "kafka.server:name=IsrShrinksPerSec,type=ReplicaManager" }                                   
+       - { name: "UnderReplicatedPartitions", mbean: "kafka.server:name=UnderReplicatedPartitions,type=ReplicaManager" }
+       - { name: "RequestsPerSec.Produce", mbean: "kafka.network:name=RequestsPerSec,request=Produce,type=RequestMetrics" }
+       - { name: "RequestsPerSec.OffsetCommit", mbean: "kafka.network:name=RequestsPerSec,request=OffsetCommit,type=RequestMetrics" }
+       - { name: "RequestsPerSec.FetchFollower", mbean: "kafka.network:name=RequestsPerSec,request=FetchFollower,type=RequestMetrics" }
+       - { name: "RequestsPerSec.FetchConsumer", mbean: "kafka.network:name=RequestsPerSec,request=FetchConsumer,type=RequestMetrics" }       
+       - { name: "LogFlushRateAndTimeMs", mbean: "kafka.log:name=LogFlushRateAndTimeMs,type=LogFlushStats" }       
+       - { name: "java.Memory", mbean: "java.lang:type=Memory" }
+#       - { name: "java.G1EdenSpace", mbean: "java.lang:name=G1 Eden Space,type=MemoryPool" }       
+#       - { name: "java.G1OldGen", mbean: "java.lang:name=G1 Old Gen,type=MemoryPool" }
+#       - { name: "java.G1SurvivorSpace", mbean: "java.lang:name=G1 Survivor Space,type=MemoryPool" }       
+       - { name: "java.G1YoungGeneration", mbean: "java.lang:name=G1 Young Generation,type=GarbageCollector" }   
+       - { name: "java.G1OldGeneration", mbean: "java.lang:name=G1 Old Generation,type=GarbageCollector" }
+       
+  - plugin: jolokia
+    config:
+       - name_override = "zookeeper"
+       - context = "/jolokia/"
+    servers:
+      - { name: "{{ ansible_hostname }}", host: "{{ansible_hostname}}", port: "{{ zookeeper_jolokia_port }}" }
+    metrics:
+       - { name: "java.PSMarkSweep", mbean: "java.lang:name=PS MarkSweep,type=GarbageCollector" }
+       - { name: "java.PSScavenge", mbean: "java.lang:name=PS Scavenge,type=GarbageCollector" }
+       #- { name: "java.PSEdenSpace", mbean: "java.lang:name=PS Eden Space,type=MemoryPool" }    
+       #- { name: "java.PSOldGen", mbean: "java.lang:name=PS Old Gen,type=MemoryPool" }       
+       #- { name: "java.PSSurvivorSpace", mbean: "java.lang:name=PS Survivor Space,type=MemoryPool" }    
+       - { name: "java.Memory", mbean: "java.lang:type=Memory" }           
+       
+       #- { name: "zookeeper", mbean: "org.apache.ZooKeeperService:*" }
+       
+#http://10.101.100.136:8778/jolokia/search/kafka.server:*   
+#http://10.101.100.136:8778/jolokia/search/java.*:* 
+#http://10.101.100.136:9999/jolokia/search/org.apache.ZooKeeperService:* 
+#http://10.101.100.136:9999/jolokia/read/org.apache.ZooKeeperService:*
+
+
+

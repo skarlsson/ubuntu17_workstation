@@ -1,0 +1,7 @@
+# file: roles/scala/meta/main.yml
+
+dependencies:
+  #- { role: java-smola }
+  #- { role: smola.java }
+  #- { role: smola.java }
+  #- { role: java/jdk8 }

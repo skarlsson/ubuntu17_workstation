@@ -1,0 +1,16 @@
+- hosts: all
+  gather_facts: yes
+
+- hosts: all
+  roles:
+    - common
+    - desktop_tools	
+    - chrome
+    - build_cpp
+    - java8	
+    - build_java
+    - scala	
+    - idea		
+    - zookeeper_dev
+    - kafka_dev
+    - confluent_schema_registry_dev

@@ -1,0 +1,48 @@
+---
+#- name: Import InfluxDB GPG signing key
+#  apt_key: url=https://repos.influxdata.com/influxdb.key state=present  
+
+#- name: Add Influxdb repository (using LSB).
+#  apt_repository:
+#    repo: "deb https://repos.influxdata.com/{{ ansible_distribution|lower }} {{ ansible_lsb.codename }} stable"
+#    state: present
+#  become: yes
+
+- name: Install InfluxDB packages
+  package: name={{ item }} state=latest
+  become: true  
+  with_items:
+    - influxdb
+    - influxdb-client     
+
+- name: creates root dir
+  file: path="{{ influxdb_root_dir }}" state=directory  group=influxdb owner=influxdb
+  
+- name: creates meta dir
+  file: path="{{ influxdb_root_dir }}/meta" state=directory  group=influxdb owner=influxdb
+
+- name: creates data dir
+  file: path="{{ influxdb_root_dir }}/data" state=directory group=influxdb owner=influxdb
+
+- name: creates hh dir
+  file: path="{{ influxdb_root_dir }}/hh" state=directory group=influxdb owner=influxdb
+
+- name: creates wal dir
+  file: path="{{ influxdb_root_dir }}/wal" state=directory group=influxdb owner=influxdb
+  
+- name: update the configuration
+  template: src=influxdb.conf dest=/etc/influxdb/influxdb.conf
+  notify:
+    - restart influxdb
+ 
+- file: path={{ influxdb_root_dir }} state=directory group=influxdb owner=influxdb
+  
+- name: "make sure the service is running and enabled"
+  service: "name=influxdb state=running enabled=yes"
+
+- name: Create telegraf database
+  command: /usr/bin/influx -execute 'CREATE DATABASE telegraf'
+
+- name: set retention time on telegraf database
+  command: /usr/bin/influx -execute 'CREATE RETENTION POLICY "seven_days" ON "telegraf" DURATION 7d REPLICATION 1 DEFAULT'
+  

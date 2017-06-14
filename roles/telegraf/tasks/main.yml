@@ -1,0 +1,63 @@
+---
+# tasks file for ansible-telegraf
+
+- name: Ensure the system can use the HTTPS transport for APT.
+  stat:
+    path: /usr/lib/apt/methods/https
+  register: apt_https_transport
+ 
+- name: Install APT HTTPS transport.
+  apt:
+    name: "apt-transport-https"
+    state: present
+  when: not apt_https_transport.stat.exists
+  become: yes
+ 
+#- name: Download Influxdb apt key.
+#  apt_key:
+#    url: "https://repos.influxdata.com/influxdb.key"
+#    state: present
+#  become: yes
+
+#- name: Add Influxdb repository (using LSB).
+#  apt_repository:
+#    repo: "deb https://repos.influxdata.com/{{ ansible_distribution|lower }} {{ ansible_lsb.codename }} stable"
+#    state: present
+#  become: yes
+
+- name: download {{telegraf_deb_url}}
+  get_url: url={{telegraf_deb_url}} dest=/tmp/{{telegraf_deb_package }}
+
+- name: install apt package of telegraf from local file
+  apt: deb=/tmp/{{telegraf_deb_package }}
+  notify:
+    - restart telegraf
+  
+- name: Install telegraf package
+  apt:
+    name: telegraf
+    state: installed
+  notify:
+    - restart telegraf
+
+- name: "Copy the template"
+  template:
+    src: telegraf.conf.j2
+    dest: /etc/telegraf/telegraf.conf
+    owner: telegraf
+    group: telegraf
+    mode: 0640
+  notify:
+    - restart telegraf
+
+- name: Copy telegraf extra plugins
+  template:
+    src: "telegraf-extra-plugin.conf.j2"
+    dest: "/etc/telegraf/telegraf.d/extra-plugins.conf"
+    owner: telegraf
+    group: telegraf
+    mode: 0640
+  when: "telegraf_plugins_extra is defined and telegraf_plugins_extra is iterable"
+  notify:
+    - restart telegraf
+
