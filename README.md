@@ -11,7 +11,7 @@ chmod 400 ~/.ssh/id_rsa
 chmod 700 ~/.ssh
 mkdir ansible 
 cd ansible
-git clone git@bitbucket.org:bitbouncer/ansible_ubuntu_desktop.git
+git clone https://github.com/skarlsson/ubuntu17_workstation.git
 ```
 
 #if you have a second ssd
