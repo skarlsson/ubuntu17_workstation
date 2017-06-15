@@ -17,6 +17,7 @@
   
   with_items:
     - cpufrequtils
+    - indicator-cpufreq	
 
 - name: alter cpufrequtils config
   lineinfile:
