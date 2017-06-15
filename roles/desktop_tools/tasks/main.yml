@@ -1,20 +1,28 @@
 - apt_key: url=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present
-  sudo: yes
+  become: true
 
 - name: add chrome repo
   apt_repository: repo='deb http://dl.google.com/linux/chrome/deb/ stable main' state=present
-  sudo: yes
+  become: true
 
 - name: add kodi repo
   apt_repository: repo='ppa:team-xbmc/ppa' state=present
-  sudo: yes
+  become: true
   
 - name: add variety wallpaper repo
   apt_repository: repo='ppa:peterlevi/ppa' state=present
-  sudo: yes
- 
+  become: true
+
+- name: Add spotify repo signing key
+  apt_key: url=hkp://keyserver.ubuntu.com:80 id=36A1D7869245C8950F966E92D8576A8BA88D21E9
+  become: true
+
+- name: add spotify repo
+  apt_repository: repo='deb http://repository.spotify.com stable non-free' state=present
+  become: true  
+  
 - name: make sure nice-to-have stuff are installed/up-to-date
-  sudo: yes
+  become: true
   apt: pkg={{ item }} update_cache=yes
   
   with_items:
@@ -25,4 +33,5 @@
     - variety-slideshow
     - kodi
     - network-manager-openvpn-gnome
+    - spotify-client
 
