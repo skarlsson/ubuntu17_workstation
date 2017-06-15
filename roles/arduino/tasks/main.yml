@@ -1,0 +1,16 @@
+- name: install debian prerequsites
+  package: name={{ item }} state=latest
+  become: true  
+  with_items:
+    - xz-utils
+    - gtar
+
+#- name: download arduino ide
+#  get_url: url={{arduino_ide_url}} dest=/opt/arduino-{{ arduino_ide_version }}-linux64.tar.xz
+#  become: true
+  
+- name: download arduino ide  
+  unarchive:
+    src: {{arduino_ide_url}}
+    dest: /opt
+    remote_src: True
