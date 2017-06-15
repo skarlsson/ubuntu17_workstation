@@ -3,16 +3,11 @@
 ```
 sudo apt-get install ssh ansible git
 
-git config --global user.email "svante.karlsson@csi.se"
-git config --global user.name "svante karlsson"
+git config --global user.email "your@email"
+git config --global user.name "your name"
 
-
-copy your ssh keys .to .ssh
-chmod 400 ~/.ssh/id_rsa
-chmod 700 ~/.ssh
-mkdir ansible 
-cd ansible
-git clone git@bitbucket.org:bitbouncer/ansible_ubuntu_desktop.git
+git clone https://github.com/skarlsson/ubuntu17_workstation.git
+cd ubuntu17_workstation
 ```
 
 #if you have a second ssd
