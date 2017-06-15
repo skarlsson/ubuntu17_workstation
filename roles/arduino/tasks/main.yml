@@ -16,6 +16,7 @@
 
 - name: extract arduino ide
   shell: tar xvf arduino-{{ arduino_ide_version }}-linux64.tar.xz
+  args:
     chdir: /opt
     creates: /opt/arduino-{{ arduino_ide_version }}
   become: true
