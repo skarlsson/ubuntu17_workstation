@@ -4,12 +4,18 @@
   with_items:
     - xz-utils
 
-#- name: download arduino ide
-#  get_url: url={{arduino_ide_url}} dest=/opt/arduino-{{ arduino_ide_version }}-linux64.tar.xz
-#  become: true
+- name: download arduino ide
+  get_url: url={{arduino_ide_url}} dest=/opt/arduino-{{ arduino_ide_version }}-linux64.tar.xz
+  become: true
   
-- name: download arduino ide  
-  unarchive:
-    src: "{{ arduino_ide_url }}"
-    dest: /opt
-    remote_src: True
+#- name: download arduino ide  
+#  unarchive:
+#    src: "{{ arduino_ide_url }}"
+#    dest: /opt
+#    remote_src: True
+
+- name: extract arduino ide
+  shell: tar xvf arduino-{{ arduino_ide_version }}-linux64.tar.xz
+    chdir: /opt
+    creates: /opt/arduino-{{ arduino_ide_version }}
+  become: true
