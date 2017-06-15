@@ -11,6 +11,6 @@
   
 - name: download arduino ide  
   unarchive:
-    src: {{arduino_ide_url}}
+    src: "{{ arduino_ide_url }}"
     dest: /opt
     remote_src: True
