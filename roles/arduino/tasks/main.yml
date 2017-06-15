@@ -3,7 +3,6 @@
   become: true  
   with_items:
     - xz-utils
-    - gtar
 
 #- name: download arduino ide
 #  get_url: url={{arduino_ide_url}} dest=/opt/arduino-{{ arduino_ide_version }}-linux64.tar.xz
