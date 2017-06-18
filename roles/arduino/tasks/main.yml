@@ -3,6 +3,7 @@
   become: true  
   with_items:
     - xz-utils
+    - python-pip
 
 - name: download arduino ide
   get_url: url={{arduino_ide_url}} dest=~/arduino-{{ arduino_ide_version }}-linux64.tar.xz
@@ -18,3 +19,27 @@
   args:
     chdir: ~/
     creates: ~/arduino-{{ arduino_ide_version }}
+
+- name: install pyserial
+  pip: name=pyserial
+  become: true
+
+
+- name: create expressif dir
+  file:
+    path: ~/arduino-{{ arduino_ide_version }}/hardware/espressif
+    state: directory
+    mode: 0755
+
+
+- name: checkout esp32 files
+  git:
+    repo: 'https://github.com/espressif/arduino-esp32.git'
+    dest: ~/arduino-{{ arduino_ide_version }}/hardware/espressif/esp32
+
+- name: download espressif tools
+  shell: python get.py
+  args:
+    chdir: ~/arduino-{{ arduino_ide_version }}/hardware/espressif/esp32/tools
+ #   creates: ~/arduino-{{ arduino_ide_version }}/hardware/espressif/esp32/tools/dist
+
