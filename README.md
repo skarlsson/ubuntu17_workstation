@@ -11,7 +11,7 @@ cd ubuntu17_workstation
 ansible-playbook -i "localhost," -c local initial.yml --ask-sudo-pass 
 ```
 
-#if you have a second ssd
+#if you have a second ssd (YOUR SECOND SSD DEVICE IS LIKELY DIFFERENT!!!)
 ```
 lsblk
 
