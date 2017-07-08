@@ -11,7 +11,7 @@ cd ubuntu17_workstation
 ansible-playbook -i "localhost," -c local initial.yml --ask-sudo-pass 
 ```
 
-#if you have a second ssd (YOUR SECOND SSD DEVICE IS LIKELY DIFFERENT!!!)
+#### if you have a second ssd (YOUR SECOND SSD DEVICE IS LIKELY DIFFERENT!!!)
 ```
 lsblk
 
@@ -25,22 +25,22 @@ ansible-playbook -i "localhost," -c local --extra-vars "second_ssd_device=/dev/n
 
 ansible-playbook -i "localhost," -c local common.yml --ask-sudo-pass 
 
-#if you want kafka
+#### if you want kafka
 ```
 ansible-playbook -i "localhost," -c local kafka.yml
 ```
 
-#if you want influx, grafana & telegraf (for development)
+#### if you want influx, grafana & telegraf (for development)
 ```
 ansible-playbook -i "localhost," -c local monitoring.yml
 ```
 
-#tensorflow (without GPU)
+#### tensorflow (without GPU)
 ```
 ansible-playbook -i "localhost," -c local tensorflow.yml
 ```
 
-#clion
+#### clion
 ```
 ansible-playbook -i "localhost," -c local jetbrains.yml
 ```
