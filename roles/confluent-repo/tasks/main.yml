@@ -1,0 +1,9 @@
+- name: add confluent signing key
+  apt_key: url=http://packages.confluent.io/deb/3.0/archive.key state=present  
+  
+- name: add confluent repo
+  apt_repository: repo='deb http://packages.confluent.io/deb/3.0 stable main' state=present  
+  
+- name: update apt packages
+  apt: update_cache=yes upgrade=yes
+
