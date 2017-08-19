@@ -1,7 +1,8 @@
 # README #
 
 ```
-sudo apt-get install ssh ansible git
+sudo apt -y update
+sudo apt-get install ssh ansible git aptitude
 
 git config --global user.email "your@email"
 git config --global user.name "your name"
