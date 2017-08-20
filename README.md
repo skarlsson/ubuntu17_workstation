@@ -9,7 +9,6 @@ git config --global user.name "your name"
 
 git clone https://github.com/skarlsson/ubuntu17_workstation.git
 cd ubuntu17_workstation
-ansible-playbook -i "localhost," -c local initial.yml --ask-sudo-pass 
 ```
 
 #### if you have a second ssd (YOUR SECOND SSD DEVICE IS LIKELY DIFFERENT!!!)
@@ -24,7 +23,9 @@ ansible-playbook -i "localhost," -c local --extra-vars "second_ssd_device=/dev/n
 ```
 
 #### common stuff
+```
 ansible-playbook -i "localhost," -c local common.yml --ask-sudo-pass 
+```
 
 #### if you want kafka
 ```
