@@ -24,7 +24,7 @@
   vars:
     dbname: test
     dbuser: test
-    dbpassword: mysupersecretpassword
+    dbpassword: test
 
   tasks:
   - name: ensure database is created
