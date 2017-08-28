@@ -2,7 +2,7 @@
   become: true
 
 - name: add chrome repo
-  apt_repository: repo='deb http://dl.google.com/linux/chrome/deb/ stable main' state=present
+  apt_repository: repo='deb [arch=arm64] http://dl.google.com/linux/chrome/deb/ stable main' state=present
   become: true
 
 - name: add kodi repo

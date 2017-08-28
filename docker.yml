@@ -1,0 +1,13 @@
+- hosts: all
+  gather_facts: yes
+
+- hosts: all
+  become: true
+  tasks:
+   - apt: update_cache=yes upgrade=yes
+
+- hosts: all
+  become: true
+  roles:
+     - docker  
+  
