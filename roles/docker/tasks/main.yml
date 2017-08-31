@@ -10,20 +10,6 @@
 #    update_cache: yes
 #    state: present
 
-
-#- name: Install docker package
-#  apt:
-#    name: docker-ce
-
-
-- name: Make sure the docker group is present
-  action: group name=docker state=present
-
-- name: Adding existing user '{{ lookup('env','USER') }}' to group docker
-  user: name='{{ lookup('env','USER') }}'
-        groups=docker
-        append=yes
-
 - name: Install docker
   sudo: yes
   apt: pkg={{ item }}
@@ -31,3 +17,9 @@
   with_items:
     - docker
     - docker.io
+    
+- name: Adding existing user '{{ lookup('env','USER') }}' to group docker
+  user: name='{{ lookup('env','USER') }}'
+        groups=docker
+        append=yes
+    
