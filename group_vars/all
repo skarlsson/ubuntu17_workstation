@@ -4,6 +4,7 @@ logrotate_frequency:   daily
 
 #shared service ports
 zookeeper_client_port:   2181
+kafka_server_ssl_port:   9091
 kafka_server_port:       9092
 schema_registry_port:    8081
 influxdb_port:           8086
@@ -15,10 +16,9 @@ zookeeper_root_dir:      "{{ root_data_dir }}/zookeeper"
 zookeeper_data_dir:      "{{ zookeeper_root_dir }}/zkdata"
 zookeeper_data_log_dir:  "{{ zookeeper_root_dir }}/zklog"
 
-
 #KAFKA PROPS
 kafka_zookeeper_connect: "{{ ansible_hostname }}:{{ zookeeper_client_port }}"
-kafka_brokers_connect:   "{{ ansible_hostname }}:{{ kafka_server_port }}"
+kafka_brokers_connect:   "PLAINTEXT://{{ ansible_hostname }}:{{ kafka_server_port }}"
 kafka_log_dirs:
     - "{{ root_data_dir }}/kafka_log"
 

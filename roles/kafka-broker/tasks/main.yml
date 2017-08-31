@@ -8,6 +8,58 @@
 
 - name: Make sure the kafka user is present
   user: name={{ kafka_user }} group={{ kafka_group }} home="/app/home/{{ kafka_user }}" shell=/bin/bash state=present comment="Kafka user"
+
+- name: copy librdkafka gen-ssl-certs.sh
+  template: src=gen-ssl-certs.sh dest=/usr/local/bin/gen-ssl-certs.sh owner=root group=root mode=755
+
+- name: Creates dummy ca cert dir
+  file: path=/csi/dummy_ca state=directory mode=0750
+
+- name: create dummy ca cert
+  shell: gen-ssl-certs.sh ca ca-cert dummy
+  args:
+    chdir: /csi/dummy_ca
+    creates: /csi/dummy_ca/ca-cert
+
+- name: Creates /usr/share/ca-certificates/dummy_ca
+  file: path=/usr/share/ca-certificates/dummy_ca state=directory mode=0755
+
+- name: copy ca cert 
+  command: cp /csi/dummy_ca/ca-cert /usr/share/ca-certificates/dummy_ca/ca-cert
+  args:
+    creates: /usr/share/ca-certificates/dummy_ca/ca-cert
+
+- name: Creates broker keystore dir
+  file: path=/csi/broker_keystore state=directory owner={{ kafka_user }} group={{ kafka_group }} mode=0750
+
+- name: create broker keystore
+  shell: gen-ssl-certs.sh -k server /csi/dummy_ca/ca-cert broker_{{ansible_hostname}}_ {{ansible_hostname}}
+  args:
+    chdir: /csi/broker_keystore
+    creates: /csi/broker_keystore/broker_{{ansible_hostname}}_server.keystore.jks
+
+#this is just a sample -should probably per app / user / docker container ...
+- name: creates java client keystore dir
+  file: path=/csi/java_client_keystore state=directory
+
+- name: creates java client keystore
+  shell: gen-ssl-certs.sh -k client /csi/dummy_ca/ca-cert client_{{ansible_hostname}}_ {{ansible_hostname}}
+  args:
+    chdir: /csi/java_client_keystore
+    creates: /csi/java_client_keystore/client_{{ansible_hostname}}_client.keystore.jks
+
+
+#this is just a sample - should probably per app / user / docker container ...
+- name: Creates openssl client keystore dir
+  file: path=/csi/openssl_client_keystore state=directory
+
+- name: creates openssl client keystore
+  shell: gen-ssl-certs.sh client /csi/dummy_ca/ca-cert client_{{ansible_hostname}}_ {{ansible_hostname}}
+  args:
+    chdir: /csi/openssl_client_keystore
+    creates: /csi/openssl_client_keystore/client_{{ansible_hostname}}_client.pem
+
+# install kafka
   
 - name: Creates src directory {{ kafka_root_dir }}/src
   file: path={{ kafka_root_dir }}/src state=directory
