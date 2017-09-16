@@ -1,15 +1,17 @@
 # file: roles/kafka/defaults/main.yml
 
 
-zookeeper_client_port: 2181
-kafka_jolokia_port:    8778    
-kafka_server_port:     9092
+#zookeeper_client_port: 2181
+#kafka_jolokia_port:    8778    
+#kafka_server_port:     9092
+#kafka_user: kafka
+#kafka_group: kafka
 
 kafka_advertized_hostname: "{{ ansible_nodename }}"
 kafka_server_HEAP_OPTS: '-Xmx4G -Xms4G'
 
 scala_version:       2.12
-kafka_short_version: 0.11.0.0
+kafka_short_version: 0.11.0.1
 jolokia_version:     1.3.6
 
 kafka_full_version: "{{scala_version}}-{{kafka_short_version}}"
@@ -19,8 +21,6 @@ jolokia_download_url: https://github.com/rhuss/jolokia/releases/download/v{{ jol
 
 kafka_root_dir: /csi/kafka
 
-kafka_user: kafka
-kafka_group: kafka
 kafka_default_replication_factor:   3
 kafka_min_insync_replicas:          2
 kafka_default_num_partitions:       8

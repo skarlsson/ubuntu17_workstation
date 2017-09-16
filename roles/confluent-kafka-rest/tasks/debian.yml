@@ -2,6 +2,8 @@
   apt: pkg={{ item }}
   with_items:
    - confluent-kafka-rest
+   - confluent-rest-utils
+   - confluent-common
 
 - file: path=/etc/confluent-kafka-rest state=directory owner={{ kafka_user }} group={{ kafka_group }}
    

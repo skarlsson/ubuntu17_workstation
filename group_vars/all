@@ -3,13 +3,14 @@ logrotate_rotate:      2
 logrotate_frequency:   daily
 
 #shared service ports
-zookeeper_client_port:   2181
-kafka_server_ssl_port:   9091
-kafka_server_port:       9092
-schema_registry_port:    8081
-influxdb_port:           8086
-zookeeper_jolokia_port:  8777
-kafka_jolokia_port:      8778
+zookeeper_client_port:    2181
+kafka_server_port:        9092
+kafka_server_ssl_port:    9093
+schema_registry_port:     8081
+schema_registry_ssl_port: 8082
+influxdb_port:            8086
+zookeeper_jolokia_port:   8777
+kafka_jolokia_port:       8778
 
 #ZOOKEEPER PROPS
 zookeeper_root_dir:      "{{ root_data_dir }}/zookeeper"
@@ -17,16 +18,28 @@ zookeeper_data_dir:      "{{ zookeeper_root_dir }}/zkdata"
 zookeeper_data_log_dir:  "{{ zookeeper_root_dir }}/zklog"
 
 #KAFKA PROPS
+kafka_user:  kafka
+kafka_group: kafka
 kafka_zookeeper_connect: "{{ ansible_hostname }}:{{ zookeeper_client_port }}"
 kafka_brokers_connect:   "PLAINTEXT://{{ ansible_hostname }}:{{ kafka_server_port }}"
 kafka_log_dirs:
     - "{{ root_data_dir }}/kafka_log"
-
 kafka_broker_id:                    1
 kafka_default_replication_factor:   1
 kafka_min_insync_replicas:          1
 kafka_auto_leader_rebalance_enable: true
 kafka_advertized_hostname:          "{{ ansible_hostname }}"
+
+#SCHEMA REGISTRY PROPS
+#schema_registry_connect: "http://{{ ansible_hostname }}:{{ schema_registry_port }},https://{{ ansible_hostname }}:{{ schema_registry_ssl_port }}"
+schema_registry_connect: "http://{{ ansible_hostname }}:{{ schema_registry_port }}"
+
+#SSL PROPS
+kafkastore_ssl_key_password : "abcdef"
+kafkastore_ssl_keystore_location : "/etc/kafka/keystore"
+kafkastore_ssl_keystore_password :  "abcdef"
+kafkastore_ssl_truststore_location : "/etc/kafka/truststore"
+kafkastore_ssl_truststore_password : "abcdef"
 
 #INFLUX PROPS	
 influxdb_root_dir: "{{ root_data_dir }}/influxdb"

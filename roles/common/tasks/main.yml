@@ -25,6 +25,7 @@
     - sysstat
     - emacs
     - openvpn
+    - jq
 
 
 - apt_repository: repo='ppa:nilarimogard/webupd8' state=present
