@@ -24,40 +24,46 @@
 - name: Creates /usr/share/ca-certificates/dummy_ca
   file: path=/usr/share/ca-certificates/dummy_ca state=directory mode=0755
 
-- name: copy ca cert 
-  command: cp /csi/dummy_ca/ca-cert /usr/share/ca-certificates/dummy_ca/ca-cert
-  args:
-    creates: /usr/share/ca-certificates/dummy_ca/ca-cert
+- file: path=/usr/share/ca-certificates/dummy_ca/ca-cert state=absent
+
+- file: path=/csi/broker_keystore state=absent
+
+- file: path=/csi/java_client_keystore state=absent
+
+- file: path=/csi/openssl_client_keystore state=absent
 
 - name: Creates broker keystore dir
-  file: path=/csi/broker_keystore state=directory owner={{ kafka_user }} group={{ kafka_group }} mode=0750
+  file: path=/etc/kafka-broker-keystore  state=directory owner={{ kafka_user }} group={{ kafka_group }} mode=0750
 
 - name: create broker keystore
-  shell: gen-ssl-certs.sh -k server /csi/dummy_ca/ca-cert broker_{{ansible_hostname}}_ {{ansible_hostname}}
+  shell: gen-ssl-certs.sh -k server /csi/dummy_ca/ca-cert {{ansible_hostname}}_ {{ansible_hostname}}
   args:
-    chdir: /csi/broker_keystore
-    creates: /csi/broker_keystore/broker_{{ansible_hostname}}_server.keystore.jks
+    chdir: /etc/kafka-broker-keystore
+    creates: /etc/kafka-broker-keystore/{{ansible_hostname}}_server.keystore.jks
 
 #this is just a sample -should probably per app / user / docker container ...
-- name: creates java client keystore dir
-  file: path=/csi/java_client_keystore state=directory
+- name: creates client credentials
+  file: path=/etc/kspp/credentials/ state=directory
+
+- name: copy ca cert 
+  command: cp /csi/dummy_ca/ca-cert /etc/kspp/credentials/{{ansible_hostname}}_cacert.pem
+  args:
+    creates: /etc/kspp/credentials/{{ansible_hostname}}_cacert.pem
 
 - name: creates java client keystore
-  shell: gen-ssl-certs.sh -k client /csi/dummy_ca/ca-cert client_{{ansible_hostname}}_ {{ansible_hostname}}
+  shell: gen-ssl-certs.sh -k client /csi/dummy_ca/ca-cert {{ansible_hostname}}_ {{ansible_hostname}}
   args:
-    chdir: /csi/java_client_keystore
-    creates: /csi/java_client_keystore/client_{{ansible_hostname}}_client.keystore.jks
+    chdir: /etc/kspp/credentials/
+    creates: /etc/kspp/credentials/{{ansible_hostname}}_client.keystore.jks
 
-
-#this is just a sample - should probably per app / user / docker container ...
-- name: Creates openssl client keystore dir
-  file: path=/csi/openssl_client_keystore state=directory
-
-- name: creates openssl client keystore
-  shell: gen-ssl-certs.sh client /csi/dummy_ca/ca-cert client_{{ansible_hostname}}_ {{ansible_hostname}}
+- name: creates openssl client cert and key
+  shell: gen-ssl-certs.sh client /csi/dummy_ca/ca-cert {{ansible_hostname}}_ {{ansible_hostname}}
   args:
-    chdir: /csi/openssl_client_keystore
-    creates: /csi/openssl_client_keystore/client_{{ansible_hostname}}_client.pem
+    chdir: /etc/kspp/credentials/
+    creates: /etc/kspp/credentials/{{ansible_hostname}}_client.pem
+
+- name: create a env file
+  template: src=kspp_env dest=/etc/kspp/{{ansible_hostname}}_kspp_env mode=0755
 
 # install kafka
   

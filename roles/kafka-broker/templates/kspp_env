@@ -1,0 +1,18 @@
+export KSPP_ZK_URL={{ kafka_zookeeper_connect }}
+export KSPP_KAFKA_BROKER_URL={{ kafka_ssl_connect }}
+export KSPP_SCHEMA_REGISTRY_URL={{ schema_registry_https_connect }}
+
+export KSPP_CA_CERT=/etc/kspp/credentials/{{ansible_hostname}}_cacert.pem
+
+export KSPP_CLIENT_CERT=/etc/kspp/credentials/{{ansible_hostname}}_client.pem
+export KSPP_CLIENT_KEY=/etc/kspp/credentials/{{ansible_hostname}}_client.key
+export KSPP_CLIENT_KEY_PASSPHRASE=abcdefgh
+
+export KSPP_CLIENT_KEYSTORE_PATH=/etc/kspp/credentials/{{ansible_hostname}}_client.keystore.jks
+export KSPP_CLIENT_KEYSTORE_PASSPHRASE=abcdefgh
+export KSPP_CLIENT_KEYSTORE_KEY_PASSPHRASE=abcdefgh
+
+export KSPP_CLIENT_TRUSTSTORE_PATH=/etc/kspp/credentials/{{ansible_hostname}}_client.truststore.jks
+export KSPP_CLIENT_TRUSTSTORE_PASSPHRASE=abcdefgh
+
+
