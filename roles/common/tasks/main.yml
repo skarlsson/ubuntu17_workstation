@@ -26,6 +26,8 @@
     - emacs
     - openvpn
     - jq
+    - iftop
+    - bmon
 
 
 - apt_repository: repo='ppa:nilarimogard/webupd8' state=present

@@ -40,6 +40,8 @@
     - update-notifier-common
     - uuid-dev
     - unzip	
-    - zlib1g-dev	
+    - zlib1g-dev
+    - valgrind	
+    - kcachegrind
 
 #- libboost-dev

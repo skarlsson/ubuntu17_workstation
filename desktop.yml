@@ -4,6 +4,5 @@
 - hosts: all
   become: yes
   roles:
-    - common
-    - build_cpp
-    - java8
+    - desktop_tools	
+

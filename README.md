@@ -22,9 +22,14 @@ time for a reboot...
 ansible-playbook -i "localhost," -c local --extra-vars "second_ssd_device=/dev/nvme1n1p1" mount_second_ssd_device.yml --ask-sudo-pass 
 ```
 
-#### common stuff
+#### basic non gui stuff
 ```
 ansible-playbook -i "localhost," -c local common.yml --ask-sudo-pass 
+```
+
+#### gui utils
+```
+ansible-playbook -i "localhost," -c local desktop.yml
 ```
 
 #### if you want kafka
