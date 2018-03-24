@@ -6,7 +6,7 @@ After=network.target kafka-broker.service
 [Service]
 User=kafka
 ExecStartPre=/bin/sleep 10
-Environment="JAVA_HOME=/usr/lib/jvm/java-8-oracle" "JRE_HOME=/usr/lib/jvm/java-8-oracle/jre" "KAFKA_HEAP_OPTS='{{rest_proxy_HEAP_OPTS}}'"
+Environment="KAFKA_HEAP_OPTS='{{rest_proxy_HEAP_OPTS}}'"
 ExecStart=/usr/bin/kafka-rest-start /etc/confluent-kafka-rest/confluent-kafka-rest.properties
 Restart=on-abort
 

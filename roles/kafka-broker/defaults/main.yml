@@ -11,8 +11,8 @@ kafka_advertized_hostname: "{{ ansible_nodename }}"
 kafka_server_HEAP_OPTS: '-Xmx4G -Xms4G'
 
 scala_version:       2.12
-kafka_short_version: 0.11.0.1
-jolokia_version:     1.3.6
+kafka_short_version: 1.0.1
+jolokia_version:     1.5.0
 
 kafka_full_version: "{{scala_version}}-{{kafka_short_version}}"
 

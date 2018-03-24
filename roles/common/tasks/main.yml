@@ -13,7 +13,6 @@
     - python-pycurl
     - python-apt
     - ntp
-    - ack-grep
     - subversion 
     - htop   
     - iotop
@@ -28,6 +27,10 @@
     - jq
     - iftop
     - bmon
+    - sshuttle
+
+#does not exist for ubuntu 17
+#    - ack-grep
 
 
 - apt_repository: repo='ppa:nilarimogard/webupd8' state=present

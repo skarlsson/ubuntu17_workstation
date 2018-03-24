@@ -20,18 +20,32 @@
 - name: write configuration
   template: src=zoo.cfg dest="/etc/zookeeper/conf/zoo.cfg"
   notify: restart zookeeperd
+
   
-- name: download jolokia {{ jolokia_version }}  
-  get_url: 
-    url: https://github.com/rhuss/jolokia/releases/download/v{{jolokia_version}}/jolokia-{{jolokia_version}}-bin.tar.gz  
-    dest: /tmp/jolokia-{{jolokia_version}}-bin.tar.gz
+#- name: download jolokia {{ jolokia_version }}  
+#  get_url: 
+#    url: https://github.com/rhuss/jolokia/releases/download/v{{jolokia_version}}/jolokia-{{jolokia_version}}-bin.tar.gz  
+#    dest: /tmp/jolokia-{{jolokia_version}}-bin.tar.gz
  
-- name: unarchive jolokia {{ jolokia_version }}  
+#THIS SHOULD WORK BUT SOMETHING IS BROKJEN IN ANSIBLE - GITHUB CERTS FAILS TO VALIDATE
+#- name: install jolokia {{ jolokia_version }}  
+#  unarchive: 
+#    src: https://github.com/rhuss/jolokia/releases/download/v{{jolokia_version}}/jolokia-{{jolokia_version}}-bin.tar.gz 
+#    dest: /usr/share/java 
+#    remote_src: yes
+#    creates: /usr/share/java/jolokia-{{jolokia_version}}/agents/jolokia-jvm.jar
+
+#PATCH FOLR ABOVE
+- name: download jolokia {{ jolokia_version }}  
+  shell: wget -O /tmp/jolokia-{{jolokia_version}}-bin.tar.gz https://github.com/rhuss/jolokia/releases/download/v{{jolokia_version}}/jolokia-{{jolokia_version}}-bin.tar.gz
+
+- name: install jolokia {{ jolokia_version }}  
   unarchive: 
-    src: /tmp/jolokia-{{jolokia_version}}-bin.tar.gz  
+    src: /tmp/jolokia-{{jolokia_version}}-bin.tar.gz
     dest: /usr/share/java 
     creates: /usr/share/java/jolokia-{{jolokia_version}}/agents/jolokia-jvm.jar
-  
+
+
 - name: update start script
   template: src=init.d.zookeeper dest="/etc/init.d/zookeeper"
   notify: restart zookeeperd

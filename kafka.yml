@@ -9,7 +9,7 @@
 - hosts: all
   become: true
   roles:
-     - java8  
+     - java9 
      - zookeeper  
      - kafka-broker	 
      - confluent-schema-registry

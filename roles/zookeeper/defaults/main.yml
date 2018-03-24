@@ -7,4 +7,4 @@ zookeeper_jolokia_port:                9999
 zookeeper_tick_time:                   2000
 zookeeper_autopurge_purge_interval:    24
 zookeeper_autopurge_snap_retain_count: 5
-jolokia_version:                       1.3.6
+jolokia_version:                       1.5.0
