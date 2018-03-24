@@ -8,7 +8,6 @@ User=kafka
 #this seems to work on centos
 #CHDIR= {{ kafka_root_dir }}
 #this is for ubuntu 17 openjdk java 9
-#Environment="JAVA_HOME=/usr/lib/jvm/open-jdk" "JRE_HOME=/usr/lib/jvm/open-jdk/jre" "KAFKA_OPTS=-javaagent:/usr/share/java/jolokia-{{ jolokia_version }}/agents/jolokia-jvm.jar=port={{ kafka_jolokia_port }},host=0.0.0.0"
 Environment="KAFKA_OPTS=-javaagent:/usr/share/java/jolokia-{{ jolokia_version }}/agents/jolokia-jvm.jar=port={{ kafka_jolokia_port }},host=0.0.0.0"
 ExecStart={{ kafka_root_dir }}/kafka/bin/kafka-server-start.sh {{ kafka_root_dir }}/config/server.properties
 Restart=on-failure

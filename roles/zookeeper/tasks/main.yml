@@ -45,10 +45,7 @@
     dest: /usr/share/java 
     creates: /usr/share/java/jolokia-{{jolokia_version}}/agents/jolokia-jvm.jar
 
-
 - name: update start script
   template: src=init.d.zookeeper dest="/etc/init.d/zookeeper"
   notify: restart zookeeperd
-  
-
 

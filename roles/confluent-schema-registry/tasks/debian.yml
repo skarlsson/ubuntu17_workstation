@@ -9,7 +9,11 @@
 - file: path=/etc/kafka/schema-registry.properties state=absent
 
 - file: path=/etc/confluent-schema-registry state=directory owner={{ kafka_user }} group={{ kafka_group }}
-   
+ 
+- file: path=/var/log/confluent state=directory owner={{ kafka_user }} group={{ kafka_group }}
+
+- file: path=/var/log/confluent/schema-registry state=directory owner={{ kafka_user }} group={{ kafka_group }}
+
 - name: systemd start script
   template: src=confluent-schema-registry.service dest=/etc/systemd/system/confluent-schema-registry.service owner=root group=root mode=644 
   notify: 

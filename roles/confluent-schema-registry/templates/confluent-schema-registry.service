@@ -4,10 +4,12 @@ Before=
 After=network.target kafka-broker.service
 
 [Service]
+Type=simple
 User=kafka
-ExecStartPre=/bin/sleep 10
-Environment="KAFKA_HEAP_OPTS='{{schema_registry_HEAP_OPTS}}'"
+ExecStartPre=/bin/sleep 30
+Environment="LOG_DIR=/var/log/confluent/schema-registry" "SCHEMA_REGISTRY_OPTS=--add-modules java.xml.bind"
 ExecStart=/usr/bin/schema-registry-start /etc/confluent-schema-registry/schema-registry.properties
+TimeoutStopSec=180
 Restart=on-abort
 
 [Install]
