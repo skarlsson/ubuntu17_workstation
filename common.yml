@@ -6,4 +6,4 @@
   roles:
     - common
     - build_cpp
-    - java8
+    - java9
