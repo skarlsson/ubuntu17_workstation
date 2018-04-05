@@ -21,7 +21,6 @@
     - libbz2-dev 
     - libboost-all-dev
     - libbz2-dev 	
-    - libcurl3	
     - libcurl4-openssl-dev	
     - libicu-dev 
     - libjansson-dev	
@@ -44,3 +43,5 @@
     - kcachegrind
 
 #- libboost-dev
+#not for 18
+#  - libcurl3	

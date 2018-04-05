@@ -33,11 +33,12 @@
 #    - ack-grep
 
 
-- apt_repository: repo='ppa:nilarimogard/webupd8' state=present
-  sudo: yes
+#not for bionic
+#- apt_repository: repo='ppa:nilarimogard/webupd8' state=present
+#  sudo: yes
 
-- apt: pkg=launchpad-getkeys
-  sudo: yes
+#- apt: pkg=launchpad-getkeys
+#  sudo: yes
 
 - name: make everyone sudo without password
   lineinfile: "dest=/etc/sudoers state=present line='%sudo ALL=(ALL) NOPASSWD: ALL'"
