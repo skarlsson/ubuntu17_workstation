@@ -30,13 +30,26 @@
 #    - ca-certificates
 #    - oracle-java9-set-default
 
-- name: Install OpenJDK Java 9
+
+- name: Install OpenJDK Java 8
   apt: name={{item}} state=latest
   become: yes
   with_items:
-    - openjdk-9-jre 
-    - openjdk-9-jdk
+    - openjdk-8-jre 
+    - openjdk-8-jdk
 
 - name: Set JAVA_HOME
-  lineinfile: dest=/etc/environment state=present regexp='^JAVA_HOME' line='JAVA_HOME=/usr/lib/jvm/java-9-openjdk-amd64/'
+  lineinfile: dest=/etc/environment state=present regexp='^JAVA_HOME' line='JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/'
   become: yes
+
+
+#- name: Install OpenJDK Java 9
+#  apt: name={{item}} state=latest
+#  become: yes
+#  with_items:
+#    - openjdk-9-jre 
+#    - openjdk-9-jdk
+
+#- name: Set JAVA_HOME
+#  lineinfile: dest=/etc/environment state=present regexp='^JAVA_HOME' line='JAVA_HOME=/usr/lib/jvm/java-9-openjdk-amd64/'
+#  become: yes
