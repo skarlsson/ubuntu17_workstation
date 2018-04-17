@@ -13,7 +13,6 @@
     - python-pycurl
     - python-apt
     - ntp
-    - subversion 
     - htop   
     - iotop
     - git
@@ -24,6 +23,7 @@
     - sysstat
     - emacs
     - openvpn
+    - network-manager-openvpn-gnome
     - jq
     - iftop
     - bmon
@@ -42,3 +42,12 @@
 
 - name: make everyone sudo without password
   lineinfile: "dest=/etc/sudoers state=present line='%sudo ALL=(ALL) NOPASSWD: ALL'"
+
+- name: add /usr/local/lib to LD_LIBRARY_PATH search path
+  lineinfile: "dest=/etc/ld.so.conf state=present line='/usr/local/lib'"
+  register: ld_so_conf
+
+- name: run ldconfig
+  command: ldconfig
+  when: ld_so_conf.changed
+
