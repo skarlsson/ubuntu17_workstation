@@ -21,26 +21,35 @@
     - curl
     - openssl
     - sysstat
-    - emacs
     - openvpn
     - network-manager-openvpn-gnome
     - jq
     - iftop
     - bmon
     - sshuttle
-    - openvpn
-    - network-manager-openvpn-gnome
-
-#does not exist for ubuntu 17
-#    - ack-grep
-
-
-#not for bionic
-#- apt_repository: repo='ppa:nilarimogard/webupd8' state=present
-#  sudo: yes
-
-#- apt: pkg=launchpad-getkeys
-#  sudo: yes
+    - automake 
+    - autogen 
+    - shtool 
+    - libtool 
+    - cmake 
+    - unzip 
+    - build-essential 
+    - libboost-all-dev 
+    - g++ 
+    - python-dev 
+    - autotools-dev 
+    - libicu-dev 
+    - zlib1g-dev 
+    - libssl-dev 
+    - libbz2-dev 
+    - libsnappy-dev 
+    - libgoogle-glog-dev 
+    - libgflags-dev 
+    - libjansson-dev 
+    - libcurl4-openssl-dev 
+    - liblzma-dev 
+    - libpq-dev 
+    - pkg-config
 
 - name: make everyone sudo without password
   lineinfile: "dest=/etc/sudoers state=present line='%sudo ALL=(ALL) NOPASSWD: ALL'"
