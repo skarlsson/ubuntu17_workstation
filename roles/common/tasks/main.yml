@@ -28,6 +28,8 @@
     - iftop
     - bmon
     - sshuttle
+    - openvpn
+    - network-manager-openvpn-gnome
 
 #does not exist for ubuntu 17
 #    - ack-grep
