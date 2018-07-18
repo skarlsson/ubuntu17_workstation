@@ -7,8 +7,8 @@ sudo apt-get install ssh ansible git aptitude
 git config --global user.email "your@email"
 git config --global user.name "your name"
 
-git clone https://github.com/skarlsson/ubuntu17_workstation.git
-cd ubuntu17_workstation
+git clone https://github.com/skarlsson/ubuntu18_workstation.git
+cd ubuntu18_workstation
 ```
 
 #### if you have a second ssd (YOUR SECOND SSD DEVICE IS LIKELY DIFFERENT!!!)
