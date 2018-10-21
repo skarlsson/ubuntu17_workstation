@@ -1,7 +1,0 @@
-- name: reload systemd
-  sudo: yes
-  command: systemctl daemon-reload
-
-- name: restart confluent-schema-registry
-  service: name=confluent-schema-registry state=restarted  
- 
