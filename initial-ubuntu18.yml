@@ -1,0 +1,72 @@
+- hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install aptitude for Ansible
+      raw: test -e /usr/bin/aptitude || (apt -y update && apt install -y aptitude)
+
+- hosts: all
+  gather_facts: true
+
+- hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
+    - apt_repository: repo={{ item }} state=present
+      with_items:
+        - deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted
+        - deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted
+        - deb http://us.archive.ubuntu.com/ubuntu/ bionic universe
+        - deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe
+        - deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse
+        - deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
+        - deb http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse
+        - deb http://security.ubuntu.com/ubuntu bionic-security main restricted
+        - deb http://security.ubuntu.com/ubuntu bionic-security universe
+        - deb http://security.ubuntu.com/ubuntu bionic-security multiverse
+        - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+    - stat: path=/etc/cloud/cloud.cfg
+      register: cloud_config
+    - lineinfile: 'dest=/etc/cloud/cloud.cfg state=present regexp="^preserve_hostname:" line="preserve_hostname: true"'
+      when: cloud_config.stat.exists == True
+    - debug: var=inventory_dir
+    - hostname: name={{ inventory_hostname }}
+    - mount: name=swap fstype=swap state=absent
+    - command: swapoff -a
+      when: ansible_swaptotal_mb > 0
+    - apt: update_cache=yes upgrade=yes autoremove=yes
+    - package: name={{ item }} state=latest
+      with_items:
+       - ntp
+       - htop
+       - iftop
+       - bmon
+       - apt-transport-https
+       - ca-certificates
+       - curl
+       - software-properties-common
+       - intel-microcode
+    - package: name={{ item }} state=latest
+      with_items:
+       - docker-ce
+       - python3-pip
+       - python-pip
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
+    - lineinfile: path=/lib/systemd/system/docker.service state=absent regexp='^LimitNOFILE='
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
+    - pip: name=docker
+    - group: name=sudo state=present
+    - group: name=wheel state=present
+    - user: name=ubuntu shell=/bin/bash groups=adm,sudo,wheel append=yes
+    - lineinfile: "dest=/etc/sudoers state=present line='%sudo ALL=(ALL) NOPASSWD: ALL'"
+    - lineinfile: path=/etc/hosts state=present regexp='^10.1.47.1 ' line='10.1.47.1 lb.bitbouncer.com'
+
+
