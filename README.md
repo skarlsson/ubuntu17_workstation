@@ -24,22 +24,12 @@ ansible-playbook -i "localhost," -c local --extra-vars "second_ssd_device=/dev/n
 
 #### basic non gui stuff
 ```
-ansible-playbook -i "localhost," -c local common.yml --ask-sudo-pass 
+ansible-playbook -i "localhost," -c local initial-ubuntu18.yml --ask-sudo-pass 
 ```
 
 #### gui utils
 ```
 ansible-playbook -i "localhost," -c local desktop.yml
-```
-
-#### if you want kafka
-```
-ansible-playbook -i "localhost," -c local kafka.yml
-```
-
-#### if you want influx, grafana & telegraf (for development)
-```
-ansible-playbook -i "localhost," -c local monitoring.yml
 ```
 
 #### tensorflow (without GPU)
