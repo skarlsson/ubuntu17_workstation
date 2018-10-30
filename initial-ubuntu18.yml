@@ -33,7 +33,7 @@
         - deb http://security.ubuntu.com/ubuntu bionic-security universe
         - deb http://security.ubuntu.com/ubuntu bionic-security multiverse
         - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
-        - ppa:https://launchpad.net/~graphics-drivers/+archive/ubuntu/ppa/+packages
+        - ppa:graphics-drivers/ppa
     - stat: path=/etc/cloud/cloud.cfg
       register: cloud_config
     - lineinfile: 'dest=/etc/cloud/cloud.cfg state=present regexp="^preserve_hostname:" line="preserve_hostname: true"'

@@ -1,0 +1,27 @@
+ssh 10.10.10.132
+
+sudo nano  /etc/default/grub 
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash pci=nommconf"
+
+sudo update-grub
+
+sudo service gdm stop ; sleep 5 ; sudo service gdm start
+
+startx
+
+sudo usermod -aG docker $USER
+
+
+
+The solution in my particular case was to deactivate Wayland modifying /etc/gdm3/custom.conf WaylandEnable=false
+
+
+
+sudo apt remove --purge cuda-*
+sudo apt remove --purge nvidia-*
+
+
+
+
+
+
