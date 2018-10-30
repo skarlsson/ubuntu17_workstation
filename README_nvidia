@@ -2,15 +2,17 @@ ssh 10.10.10.132
 
 sudo nano  /etc/default/grub 
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash pci=nommconf"
-
 sudo update-grub
+
+
+
+
 
 sudo service gdm stop ; sleep 5 ; sudo service gdm start
 
 startx
 
-sudo usermod -aG docker $USER
-
+https://docs.nvidia.com/deeplearning/digits/digits-release-notes/running-digits.html#running-digits
 
 
 The solution in my particular case was to deactivate Wayland modifying /etc/gdm3/custom.conf WaylandEnable=false
@@ -19,9 +21,25 @@ The solution in my particular case was to deactivate Wayland modifying /etc/gdm3
 
 sudo apt remove --purge cuda-*
 sudo apt remove --purge nvidia-*
+sudo apt install nvidia-driver-410
+
+sudo usermod -aG docker $USER
+
+install nvidia-docker according to link
+https://github.com/NVIDIA/nvidia-docker
 
 
+go to 
+ngc.nvidia.com and create account
 
+docker login ncr.io
 
+docker pull nvcr.io/nvidia/digits:18.09
 
+sudo mkdir /data
+sudo chmod 777 /data
 
+sudo mkdir /nvidia_ws
+sudo chmod 777 /nvidia_ws
+
+nvidia-docker run --name digits -d -p 8888:5000 -v /data:/data -v /nvidia_ws:/workspace:rw nvcr.io/nvidia/digits:18.09
