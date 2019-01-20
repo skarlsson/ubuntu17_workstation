@@ -1,9 +1,0 @@
-- name: remove junk
-  sudo: yes
-  apt: pkg={{ item }} state=absent purge=yes autoclean=yes
-  
-  with_items:
-    - webbrowser-app
-    - gnome-calendar
-    - thunderbird 
-    - unity-lens-shopping

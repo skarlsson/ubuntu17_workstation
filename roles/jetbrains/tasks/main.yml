@@ -1,8 +1,0 @@
----
-# tasks file for jetbrains stuff
-
-- name: download clion
-  get_url: url=https://download.jetbrains.com/cpp/CLion-2017.2.1.tar.gz dest=/tmp/CLion-2017.2.1.tar.gz
-
-- name: install clion
-  unarchive: src=/tmp/CLion-2017.2.1.tar.gz dest=/opt

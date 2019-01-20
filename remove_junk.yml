@@ -1,6 +1,0 @@
-- hosts: all
-  gather_facts: yes
-
-- hosts: all
-  roles:
-     - clean

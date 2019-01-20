@@ -1,2 +1,0 @@
-arduino_ide_version: 1.8.3
-arduino_ide_url: https://downloads.arduino.cc/arduino-{{ arduino_ide_version }}-linux64.tar.xz

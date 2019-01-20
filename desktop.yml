@@ -1,8 +1,0 @@
-- hosts: all
-  gather_facts: yes
-
-- hosts: all
-  become: yes
-  roles:
-    - desktop_tools	
-

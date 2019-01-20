@@ -19,6 +19,12 @@
   gather_facts: false
   become: true
   tasks:
+    - apt: pkg={{ item }} state=absent purge=yes autoclean=yes
+      with_items:
+        - webbrowser-app
+        - gnome-calendar
+        - thunderbird 
+        - unity-lens-shopping
     - apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
     - apt_key: url=https://packages.cloud.google.com/apt/doc/apt-key.gpg state=present
     - apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=382E94DE state=present

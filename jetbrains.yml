@@ -1,7 +1,0 @@
-- hosts: all
-  gather_facts: yes
-
-- hosts: all
-  become: true
-  roles:
-     - jetbrains
