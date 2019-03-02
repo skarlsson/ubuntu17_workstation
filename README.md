@@ -30,17 +30,3 @@ ansible-playbook -i "localhost," -c local initial-ubuntu18.yml --ask-sudo-pass
 sudo usermod -aG docker $USER
 
 
-#### gui utils
-```
-ansible-playbook -i "localhost," -c local desktop.yml
-```
-
-#### tensorflow (without GPU)
-```
-ansible-playbook -i "localhost," -c local tensorflow.yml
-```
-
-#### clion
-```
-ansible-playbook -i "localhost," -c local jetbrains.yml
-```

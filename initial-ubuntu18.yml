@@ -27,6 +27,8 @@
         - unity-lens-shopping
     - apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
     - apt_key: url=https://packages.cloud.google.com/apt/doc/apt-key.gpg state=present
+    - apt_key: url=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub state=present
+    - apt_key: url=https://nvidia.github.io/nvidia-docker/gpgkey state=present
     - apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=382E94DE state=present
     - apt_repository: repo={{ item }} state=present
       with_items:
@@ -41,9 +43,11 @@
         - deb http://security.ubuntu.com/ubuntu bionic-security universe
         - deb http://security.ubuntu.com/ubuntu bionic-security multiverse
         - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+        - deb http://apt.kubernetes.io/ kubernetes-xenial main
         - deb https://apt.datadoghq.com/ stable 6
         - ppa:graphics-drivers/ppa
         - ppa:yubico/stable
+    - get_url: url=https://nvidia.github.io/nvidia-docker/ubuntu18.04/nvidia-docker.list dest=/etc/apt/sources.list.d/nvidia-docker.list
     - stat: path=/etc/cloud/cloud.cfg
       register: cloud_config
     - lineinfile: 'dest=/etc/cloud/cloud.cfg state=present regexp="^preserve_hostname:" line="preserve_hostname: true"'
@@ -72,6 +76,15 @@
        - openjdk-11-jdk
        - libpam-u2f
        - icedtea-netx
+       - kubectl
+       - traceroute
+       - autoconf 
+       - build-essential 
+    - apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
+    - apt: update_cache=yes
+    - package: name={{ item }} state=latest
+      with_items:
+       - cuda
     - package: name={{ item }} state=latest
       with_items:
        - docker-ce
@@ -83,8 +96,13 @@
     - pip: name=docker
     - group: name=sudo state=present
     - group: name=wheel state=present
-    - user: name=ubuntu shell=/bin/bash groups=adm,sudo,wheel append=yes
+    - user: name={{ ansible_user }} shell=/bin/bash groups=adm,sudo,wheel,docker append=yes
     - lineinfile: "dest=/etc/sudoers state=present line='%sudo ALL=(ALL) NOPASSWD: ALL'"
     - lineinfile: path=/etc/hosts state=present regexp='^10.1.47.1 ' line='10.1.47.1 lb.bitbouncer.com'
     - sysctl: name=fs.inotify.max_user_watches value=524288
+    - sysctl: name=vm.max_map_count value=262144
+    - package: name={{ item }} state=latest
+      with_items:
+       - nvidia-docker2
+
 
