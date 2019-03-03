@@ -78,6 +78,8 @@
        - traceroute
        - autoconf 
        - build-essential 
+       - cmake
+       - net-tools
        - docker-ce
        - python3-pip
        - python-pip
