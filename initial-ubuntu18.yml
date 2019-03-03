@@ -27,7 +27,7 @@
         - unity-lens-shopping
     - apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
     - apt_key: url=https://packages.cloud.google.com/apt/doc/apt-key.gpg state=present
-    - apt_key: url=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub state=present
+#    - apt_key: url=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub state=present
     - apt_key: url=https://nvidia.github.io/nvidia-docker/gpgkey state=present
     - apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=382E94DE state=present
     - apt_repository: repo={{ item }} state=present
@@ -47,13 +47,11 @@
         - deb https://apt.datadoghq.com/ stable 6
         - ppa:graphics-drivers/ppa
         - ppa:yubico/stable
-    - get_url: url=https://nvidia.github.io/nvidia-docker/ubuntu18.04/nvidia-docker.list dest=/etc/apt/sources.list.d/nvidia-docker.list
+#    - get_url: url=https://nvidia.github.io/nvidia-docker/ubuntu18.04/nvidia-docker.list dest=/etc/apt/sources.list.d/nvidia-docker.list
     - stat: path=/etc/cloud/cloud.cfg
       register: cloud_config
     - lineinfile: 'dest=/etc/cloud/cloud.cfg state=present regexp="^preserve_hostname:" line="preserve_hostname: true"'
       when: cloud_config.stat.exists == True
-    - debug: var=inventory_dir
-    - hostname: name={{ inventory_hostname }}
     - mount: name=swap fstype=swap state=absent
     - command: swapoff -a
       when: ansible_swaptotal_mb > 0
@@ -80,29 +78,26 @@
        - traceroute
        - autoconf 
        - build-essential 
-    - apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
-    - apt: update_cache=yes
-    - package: name={{ item }} state=latest
-      with_items:
-       - cuda
-    - package: name={{ item }} state=latest
-      with_items:
        - docker-ce
        - python3-pip
        - python-pip
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
-    - lineinfile: path=/lib/systemd/system/docker.service state=absent regexp='^LimitNOFILE='
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
+#    - apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
+#    - apt: update_cache=yes
+#    - package: name={{ item }} state=latest
+#      with_items:
+#       - cuda
+#    - lineinfile: path=/lib/systemd/system/docker.service state=absent regexp='^LimitNOFILE='
+#      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
     - pip: name=docker
     - group: name=sudo state=present
     - group: name=wheel state=present
     - user: name={{ ansible_user }} shell=/bin/bash groups=adm,sudo,wheel,docker append=yes
     - lineinfile: "dest=/etc/sudoers state=present line='%sudo ALL=(ALL) NOPASSWD: ALL'"
-    - lineinfile: path=/etc/hosts state=present regexp='^10.1.47.1 ' line='10.1.47.1 lb.bitbouncer.com'
+#   - lineinfile: path=/etc/hosts state=present regexp='^10.1.47.1 ' line='10.1.47.1 lb.bitbouncer.com'
     - sysctl: name=fs.inotify.max_user_watches value=524288
     - sysctl: name=vm.max_map_count value=262144
-    - package: name={{ item }} state=latest
-      with_items:
-       - nvidia-docker2
+#    - package: name={{ item }} state=latest
+#      with_items:
+#       - nvidia-docker2
 
 
