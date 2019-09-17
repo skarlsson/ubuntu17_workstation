@@ -16,7 +16,7 @@ sudo apt-get purge nvidia*
 #reboot
 
 #install a new one
-3sudo apt search nvidia-driver
+#sudo apt search nvidia-driver
 sudo apt-get install nvidia-driver-435
 
 #make sure you have a late enough driver
