@@ -1,10 +1,10 @@
 Make sure you have installed the NVIDIA driver and Docker 19.03 for your Linux distribution
 
+docker --version
+>=19.03
 
-
-
+nvidia cuda vs driver
 10.1	>= 418.39	>= 3.0 (Kepler)
-
 
 >nvidia-smi 
 Fri Dec 25 16:49:12 2015
@@ -17,9 +17,14 @@ sudo apt-get purge nvidia*
 
 
 sudo apt search nvidia-driver
-
 sudo apt-get install nvidia-driver-435
-sudo apt-get install nvidia-435 
+
+>nvidia-smi
+make sure you have a late enough driver
+
+
+
+ansible-playbook -i "localhost," -c local initial-cuda.yml --ask-sudo-pass 
 
 
 # Running an interactive CUDA session isolating the first GPU
