@@ -27,7 +27,6 @@
         - unity-lens-shopping
     - apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
     - apt_key: url=https://packages.cloud.google.com/apt/doc/apt-key.gpg state=present
-    - apt_key: url=https://nvidia.github.io/nvidia-docker/gpgkey state=present
     - apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=382E94DE state=present
     - apt_repository: repo={{ item }} state=present
       with_items:
