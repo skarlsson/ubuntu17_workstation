@@ -27,6 +27,7 @@ ansible-playbook -i "localhost," -c local --extra-vars "second_ssd_device=/dev/n
 ansible-playbook -i "localhost," -c local initial-ubuntu18.yml --ask-sudo-pass 
 ```
 
+#run this to be able to run docker without sudo
 sudo usermod -aG docker $USER
 
 
