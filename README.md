@@ -11,7 +11,7 @@ git clone https://github.com/skarlsson/ubuntu18_workstation.git
 cd ubuntu18_workstation
 ```
 
-#### if you have a second ssd (YOUR SECOND SSD DEVICE IS LIKELY DIFFERENT!!!)
+##### OPTIONAL if you have a second ssd/harddrive (YOUR DEVICENAME IS LIKELY DIFFERENT!!!)
 ```
 lsblk
 
@@ -27,7 +27,34 @@ ansible-playbook -i "localhost," -c local --extra-vars "second_ssd_device=/dev/n
 ansible-playbook -i "localhost," -c local initial-ubuntu18.yml --ask-sudo-pass 
 ```
 
-#run this to be able to run docker without sudo
+#####run his to be able to run docker without sudo
+```
 sudo usermod -aG docker $USER
+```
 
+##### OPTIONAL how to install cuda
 
+`latest cuda vs driver
+10.1	>= 418.39
+`
+###### check what you have
+```
+nvidia-smi 
+Fri Dec 25 16:49:12 2015
++------------------------------------------------------+
+| NVIDIA-SMI 352.63     Driver Version: 352.63         |
+|-------------------------------+----------------------+
+```
+
+###### if you need to purge driver
+```
+sudo apt-get purge nvidia*
+reboot (?)
+sudo apt-get install nvidia-driver-435
+```
+
+###### install cuda
+```
+ansible-playbook -i "localhost," -c local initial-cuda.yml --ask-sudo-pass 
+docker run --gpus all nvidia/cuda:9.0-base nvidia-smi
+```
