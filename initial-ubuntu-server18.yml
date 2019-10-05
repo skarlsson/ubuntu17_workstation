@@ -51,6 +51,7 @@
       with_items:
        - ntp
        - htop
+       - glances
        - iftop
        - bmon
        - apt-transport-https
