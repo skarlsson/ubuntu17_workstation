@@ -53,8 +53,14 @@ reboot (?)
 sudo apt-get install nvidia-driver-435
 ```
 
-###### install cuda
+###### install latest cuda (10.1)
 ```
 ansible-playbook -i "localhost," -c local initial-cuda.yml --ask-sudo-pass 
+docker run --gpus all nvidia/cuda:9.0-base nvidia-smi
+```
+
+###### install older cuda (10.0)
+```
+ansible-playbook -i "localhost," -c local initial-cuda10.0.yml --ask-sudo-pass 
 docker run --gpus all nvidia/cuda:9.0-base nvidia-smi
 ```
