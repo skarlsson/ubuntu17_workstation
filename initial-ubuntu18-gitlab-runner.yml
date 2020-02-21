@@ -82,7 +82,7 @@
        - python 
        - openssh-server 
        - rsync 
-      - pip: name=docker
+    - pip: name=docker
     - group: name=sudo state=present
     - group: name=wheel state=present
     - user: name=gitlab-runner shell=/bin/bash groups=adm,sudo,wheel,docker append=yes
