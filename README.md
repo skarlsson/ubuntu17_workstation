@@ -2,13 +2,10 @@
 
 ```
 sudo apt -y update
-sudo apt-get install ssh ansible git aptitude
-
-git config --global user.email "your@email"
-git config --global user.name "your name"
-
-git clone https://github.com/skarlsson/ubuntu18_workstation.git
-cd ubuntu18_workstation
+sudo apt-get install ssh ansible git aptitude wget unzip
+wget https://github.com/skarlsson/ubuntu18_workstation/archive/master.zip
+unzip master.zip
+cd ubuntu18_workstation-master
 ```
 
 ##### OPTIONAL if you have a second ssd/harddrive (YOUR DEVICENAME IS LIKELY DIFFERENT!!!)
