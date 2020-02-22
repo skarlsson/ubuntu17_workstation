@@ -44,7 +44,7 @@
     - mount: name=swap fstype=swap state=absent
     - command: swapoff -a
       when: ansible_swaptotal_mb > 0
-    - apt: update_cache=yes upgrade=yes autoremove=yes
+    - apt: update_cache=yes upgrade=yes
     - package: name={{ item }} state=latest
       with_items:
        - ntp
