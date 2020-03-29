@@ -70,7 +70,7 @@
        - openjdk-11-jre 
        - openjdk-11-jdk
        - libpam-u2f
-       - icedtea-netx
+#       - icedtea-netx
        - kubectl
        - traceroute
        - autoconf 
@@ -80,6 +80,7 @@
        - docker-ce
        - python3-pip
        - python-pip
+       - ubuntu-drivers-common
     - pip: name=docker
     - group: name=sudo state=present
     - group: name=wheel state=present
@@ -87,5 +88,5 @@
     - lineinfile: "dest=/etc/sudoers state=present line='%sudo ALL=(ALL) NOPASSWD: ALL'"
     - sysctl: name=fs.inotify.max_user_watches value=524288
     - sysctl: name=vm.max_map_count value=262144
-
+    - command: ubuntu-drivers autoinstall
 
