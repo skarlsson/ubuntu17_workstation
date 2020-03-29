@@ -25,6 +25,8 @@
         - gnome-calendar
         - thunderbird 
         - unity-lens-shopping
+    - apt_key: url=https://nvidia.github.io/nvidia-container-runtime/gpgkey state=present
+    - get_url: url=https://nvidia.github.io/nvidia-container-runtime/ubuntu18.04/nvidia-container-runtime.list dest=/etc/apt/sources.list.d/nvidia-container-runtime.list
     - apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
     - apt_key: url=https://packages.cloud.google.com/apt/doc/apt-key.gpg state=present
     - apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=382E94DE state=present
@@ -81,6 +83,8 @@
        - python3-pip
        - python-pip
        - ubuntu-drivers-common
+       - nvidia-container-runtime
+       - dkms
     - pip: name=docker
     - group: name=sudo state=present
     - group: name=wheel state=present
